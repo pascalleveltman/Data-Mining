@@ -69,13 +69,37 @@ amountOfScoreAttributes = len(scoreAttributes)  #4
 
 preparedData = create_prepared_data()
 
+# Some notes to self
 pd.set_option('display.max_columns', 30)
-
 prep_DF = convert_to_data_frame(preparedData)
-print(prep_DF.loc[:, ' "sms" '])
+columnnames = prep_DF.columns
+mood_index = 16
+n_obs = 3051
 
-hello
+# See what the missing data is
+print("Observations left if no NaN of 3051")
+for i in range(columnnames.shape[0]):
+    array = prep_DF.loc[:, [columnnames[i]]]
+    array = array.dropna()
+    # array = array[(array.T != 0).any()]
+    print(columnnames[i], ":", array.shape[0])
 
-# for pID in patientIDs:
-#     smspid = prep_DF[pID][:]['"sms"']
-#     print(smspid)
+# See correlation between variables
+select = prep_DF.loc[:, [columnnames[17], columnnames[16]]]
+select = select.dropna()
+# select = select[(select.T != 0).any()]
+# print(select.shape[0])
+corselect = select.corr()
+print(corselect)
+# And correlation between whole dataset
+corDF = prep_DF.dropna()
+corDF.corr()
+
+# Make new dataframe,
+new_DF = prep_DF.loc[:, [columnnames[0], columnnames[14], columnnames[15], columnnames[16], columnnames[17]]]
+new_DF["work"] = prep_DF[columnnames[4]] + prep_DF[columnnames[6]] # finance and office
+new_DF["social"] = prep_DF[columnnames[8]] + prep_DF[columnnames[9]] # social and travel
+new_DF["speaking"] = prep_DF[columnnames[18]] + prep_DF[columnnames[13]] + prep_DF[columnnames[2]] # sms call communication
+new_DF["play"] = prep_DF[columnnames[3]] + prep_DF[columnnames[5]] # entertainment and game
+new_DF["total"] = new_DF["work"] + new_DF["social"] + new_DF["speaking"] + new_DF["play"] # just to check the screen time
+print(new_DF)
