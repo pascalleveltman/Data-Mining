@@ -74,6 +74,8 @@ pd.set_option('display.max_columns', 30)
 prep_DF = convert_to_data_frame(preparedData)
 print(prep_DF.loc[:, ' "sms" '])
 
+hello
+
 # for pID in patientIDs:
 #     smspid = prep_DF[pID][:]['"sms"']
 #     print(smspid)
